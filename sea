@@ -1,0 +1,96 @@
+import os
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# File path
+file_path = r"C:\Users\Sharm\Downloads\CaMS Test Case Document Sprint 1.xlsx"
+
+# Check if file exists
+if os.path.exists(file_path):
+    print("✅ File exists!")
+else:
+    print("❌ File not found — check the path!")
+
+# Read the Excel file
+try:
+    df = pd.read_excel(file_path, engine='openpyxl')
+    print("✅ File loaded successfully!")
+    print(df.head())  # Preview the data
+except Exception as e:
+    print(f"❌ Error loading file: {e}")
+
+# EDA Analysis
+if not df.empty:
+    print("\n🔍 Data Overview:")
+    print(df.info())
+    print("\n🧹 Missing Values:")
+    print(df.isnull().sum())
+    print("\n📊 Basic Statistics:")
+    print(df.describe(include='all'))
+    print("\n📝 Column Names:")
+    print(df.columns)
+
+    # Visualizations
+    plt.figure(figsize=(10, 6))
+    sns.countplot(x='Cycle 1', data=df)
+    plt.title('Test Case Results in Cycle 1')
+    plt.show()
+
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x='Role', y='Cycle 1', data=df)
+    plt.title('Cycle 1 Results by Role')
+    plt.xticks(rotation=45)
+    plt.show()
+    plt.draw()
+    plt.pause(7)  # Show the plot for 3 seconds, adjust as needed
+    plt.close()
+
+
+    plt.figure(figsize=(10, 6))
+    sns.heatmap(df.corr(numeric_only=True), annot=True, cmap='coolwarm')
+    plt.title('Correlation Heatmap')
+    plt.show()
+else:
+    print("❌ Dataframe is empty!")
+
+# OOP implementation
+class TestCase:
+    def __init__(self, test_case_id, functionality, role, test_steps, expected_result, actual_result, cycle_1):
+        self.test_case_id = test_case_id
+        self.functionality = functionality
+        self.role = role
+        self.test_steps = test_steps
+        self.expected_result = expected_result
+        self.actual_result = actual_result
+        self.cycle_1 = cycle_1
+
+    def is_test_passed(self):
+        return self.expected_result == self.actual_result
+
+    def display_summary(self):
+        status = "✅ Passed" if self.is_test_passed() else "❌ Failed"
+        print(f"Test Case ID: {self.test_case_id} | Functionality: {self.functionality} | Status: {status}")
+
+class FunctionalTestCase(TestCase):
+    def __init__(self, *args, priority='Medium', **kwargs):
+        super().__init__(*args, **kwargs)
+        self.priority = priority
+
+    def display_details(self):
+        print(f"⚡ Functional Test | Priority: {self.priority}")
+        self.display_summary()
+
+# Create an object from the first row of data
+if not df.empty:
+    functional_test = FunctionalTestCase(
+        df.loc[0, 'Test Case ID'], df.loc[0, 'Functionality'], df.loc[0, 'Role'],
+        df.loc[0, 'Test Case Steps'], df.loc[0, 'Expected Result'],
+        df.loc[0, 'Actual Result'], df.loc[0, 'Cycle 1'],
+        priority='High'
+    )
+
+    # Display test case details
+    functional_test.display_details()
+else:
+    print("❌ Dataframe is empty!")

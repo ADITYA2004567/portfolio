@@ -1,0 +1,18 @@
+import pandas as pd
+import os
+file_path = r"C:/Users/Sharm/Downloads/CaMS Test Case Document Sprint  2.xlsx"
+# print(os.path.exists(file_path))
+
+
+df = pd.read_excel(file_path)
+print(df)
+# df = pd.read_excel(file_path, sheet_name=xls.sheet_names[0])
+print(df.info())
+print(df.head())
+print(df.isnull().sum())
+print(df.describe())
+print(df.dtypes)
+print(df.duplicated().sum())
+for col in df.select_dtypes(include='object').columns:
+    print(f"\nValue counts for {col}:")
+    print(df[col].value_counts())

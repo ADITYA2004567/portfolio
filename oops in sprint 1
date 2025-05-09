@@ -1,0 +1,102 @@
+from fastapi import FastAPI, HTTPException, Path, Query, BackgroundTasks, Request, Response, Depends
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+from typing import List, Optional
+import time
+
+app = FastAPI(title="Task Manager API")
+
+# ---------- Models ----------
+
+class Task(BaseModel):
+    id: int
+    title: str
+    description: Optional[str] = None
+    completed: bool = False
+
+class TaskCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+
+# ---------- In-Memory DB ----------
+tasks: List[Task] = []
+task_id_counter = 1
+
+# ---------- Middleware ----------
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    print(f">>> Request: {request.method} {request.url}")
+    start = time.time()
+    response = await call_next(request)
+    duration = time.time() - start
+    print(f"<<< Response: {response.status_code} in {duration:.2f}s")
+    return response
+
+# ---------- Dependencies ----------
+
+def get_task_by_id(task_id: int = Path(..., gt=0)):
+    for task in tasks:
+        if task.id == task_id:
+            return task
+    raise HTTPException(status_code=404, detail="Task not found")
+
+# ---------- Background Task ----------
+
+def notify_admin(task_title: str):
+    print(f"📬 Background Task: Notify admin that task '{task_title}' was created.")
+
+# ---------- Routes ----------
+
+@app.get("/", tags=["Root"])
+def read_root():
+    return {"message": "Welcome to the Task Manager API!"}
+
+@app.post("/tasks", response_model=Task, status_code=201, tags=["Tasks"])
+def create_task(task: TaskCreate, background_tasks: BackgroundTasks):
+    global task_id_counter
+    new_task = Task(id=task_id_counter, **task.dict())
+    tasks.append(new_task)
+    task_id_counter += 1
+
+    # Background job
+    background_tasks.add_task(notify_admin, new_task.title)
+
+    return new_task
+
+@app.get("/tasks", response_model=List[Task], tags=["Tasks"])
+def get_tasks(skip: int = Query(0), limit: int = Query(10)):
+    return tasks[skip: skip + limit]
+
+@app.get("/tasks/{task_id}", response_model=Task, tags=["Tasks"])
+def get_task(task: Task = Depends(get_task_by_id)):
+    return task
+
+@app.put("/tasks/{task_id}", response_model=Task, tags=["Tasks"])#tasks that should be given to the application that should br represented by the taskid
+def update_task(
+    updated_task: TaskCreate,
+    task: Task = Depends(get_task_by_id)
+):
+    task.title = updated_task.title
+    task.description = updated_task.description
+    return task
+
+@app.delete("/tasks/{task_id}", tags=["Tasks"])
+def delete_task(task: Task = Depends(get_task_by_id)):
+    tasks.remove(task)
+    return {"message": "Task deleted successfully."}
+
+@app.get("/status", tags=["Utility"])
+def get_status(response: Response):
+    response.headers["X-App-Status"] = "Running"
+    return {"status": "OK"}
+
+# ---------- Custom Exception Handler ----------
+
+@app.exception_handler(HTTPException)
+async def custom_http_exception_handler(request: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail, "custom": "handeled by our application"
+    )
+         

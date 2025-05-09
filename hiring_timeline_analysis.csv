@@ -1,0 +1,11 @@
+name,experience,skills,expected_salary,location,email,Application Date,Job Offer Date,Hiring Time (Days)
+John Doe,5.0,"Python, SQL, Machine Learning",80000,New York,john.doe@example.com,2023-12-12,,
+Jane Smith,3.0,"Java, Spring Boot",65000,San Francisco,jane.smith@example.com,2024-01-11,2024-01-23,12.0
+Emily Johnson,7.0,"C++, Data Structures, Algorithms",90000,Chicago,emily.j@example.com,2023-12-22,2024-01-03,12.0
+Michael Brown,,"JavaScript, React",70000,Austin,michael.b@example.com,2023-11-02,,
+Sarah Davis,2.0,"Python, Pandas",60000,Seattle,sarah.d@example.com,2023-12-29,,
+Chris Wilson,5.0,"Java, SQL",75000,Boston,chris.w@example.com,2023-11-09,2023-11-21,12.0
+Jessica Lee,4.0,"HTML, CSS, JavaScript",62000,Los Angeles,jessica.lee@example.com,2023-09-28,,
+Daniel Harris,6.0,"Python, Flask, SQL",85000,Denver,daniel.h@example.com,2023-11-10,,
+Laura Martinez,3.0,,58000,Miami,laura.m@example.com,2023-12-01,2023-12-13,12.0
+James Garcia,8.0,"C#, .NET, SQL",95000,Dallas,james.g@example.com,2024-01-31,,

@@ -1,0 +1,27 @@
+import os
+import pandas as pd
+file_path = r"C:\Users\Sharm\Downloads\CaMS Test Case Document Sprint 1.xlsx"
+
+if os.path.exists(file_path):
+    print("File exists!")
+else:
+    print("File not found — check the path!")
+
+try:
+    df = pd.read_excel(file_path, engine='openpyxl')
+    print(" File loaded successfully!")
+    print(df.head())  # Preview the data
+except Exception as e:
+    print(f"Error loading file: {e}")
+
+if not df.empty:
+    print("\n Data Overview:")
+    print(df.info())
+    print("\nMissing Values:")
+    print(df.isnull().sum())
+    print("\nBasic Statistics:")
+    print(df.describe(include='all'))
+    print("\n Column Names:")
+    print(df.columns)
+else:
+    print("Dataframe is empty!")

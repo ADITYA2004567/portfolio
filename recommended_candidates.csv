@@ -1,0 +1,11 @@
+Candidate Name,Experience (Years),Skills,Expected Salary (USD),Location,Availability,Similarity Score
+Alice Johnson,5,"['python', 'sql', 'machine learning']",80000,New York,Immediate,0.4
+Emma Williams,6,"['data science', 'python', 'tensorflow']",95000,Boston,1 Month,0.16666666666666666
+Jack Davis,4,"['ai', 'nlp', 'deep learning']",87000,San Diego,Immediate,0.16666666666666666
+Bob Smith,3,"['java', 'spring boot', 'microservices']",65000,San Francisco,1 Month,0.0
+David Kim,4,"['javascript', 'react', 'node.js']",75000,Seattle,Immediate,0.0
+Charlie Lee,7,"['c++', 'embedded systems', 'iot']",90000,Austin,2 Weeks,0.0
+Frank Miller,2,"['html', 'css', 'javascript', 'bootstrap']",50000,Los Angeles,Immediate,0.0
+Grace Turner,8,"['cloud computing', 'aws', 'devops']",105000,Chicago,2 Months,0.0
+Henry Wilson,5,"['cybersecurity', 'network security']",85000,Denver,1 Month,0.0
+Ivy Brown,3,"['django', 'flask', 'postgresql']",70000,Miami,3 Weeks,0.0
