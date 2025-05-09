@@ -37,7 +37,7 @@ transform = transforms.Compose([
 ])
 
 # Load data
-dataset = FERDataset("C:/Users/Sharm/Downloads/test.csv.zip", transform)
+dataset = FERDataset("C:/Users/Sharm/Downloads/test.csv", transform)
 loader = DataLoader(dataset, batch_size=32, shuffle=True)
 
 # Load pre-trained model
